@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Form\Type;
+namespace Kreyu\Sylius\PaymentFeePlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -10,21 +10,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class CalculatorChoiceType extends AbstractType
 {
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	private $calculators;
 
-	/**
-	 * @param array $calculators
-	 */
 	public function __construct(array $calculators)
 	{
 		$this->calculators = $calculators;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	public function configureOptions(OptionsResolver $resolver): void
 	{
@@ -36,7 +31,7 @@ final class CalculatorChoiceType extends AbstractType
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	public function getParent(): string
 	{
@@ -44,10 +39,10 @@ final class CalculatorChoiceType extends AbstractType
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	public function getBlockPrefix(): string
 	{
-		return 'sylius_payment_calculator_choice';
+		return 'kreyu_payment_fee_payment_calculator_choice';
 	}
 }

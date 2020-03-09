@@ -2,27 +2,25 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Form\Extension;
+namespace Kreyu\Sylius\PaymentFeePlugin\Form\Extension;
 
-use MangoSylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
-use MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
+use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodChoiceType;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Webmozart\Assert\Assert;
 
-class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
+final class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 {
-	/**
-	 * @var ServiceRegistryInterface
-	 */
+	/** @var ServiceRegistryInterface */
 	private $calculatorRegistry;
 
-	public function __construct(
-		ServiceRegistryInterface $calculatorRegistry
-	) {
+	public function __construct(ServiceRegistryInterface $calculatorRegistry)
+	{
 		$this->calculatorRegistry = $calculatorRegistry;
 	}
 
@@ -32,7 +30,6 @@ class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 			return;
 		}
 
-		$subject = $options['subject'];
 		$paymentCosts = [];
 
 		foreach ($view->vars['choices'] as $choiceView) {
@@ -42,26 +39,29 @@ class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 				throw new UnexpectedTypeException($method, PaymentMethodWithFeeInterface::class);
 			}
 
-			if ($method->getCalculator() === null) {
+			if (null === $method->getCalculator()) {
 				$paymentCosts[$choiceView->value] = 0;
 
 				continue;
 			}
 
 			$calculator = $this->calculatorRegistry->get($method->getCalculator());
-			assert($calculator instanceof CalculatorInterface);
 
-			$paymentCosts[$choiceView->value] = $calculator->calculate($subject, $method->getCalculatorConfiguration());
+			Assert::isInstanceOf($calculator, CalculatorInterface::class);
+
+			$paymentCosts[$choiceView->value] = $calculator->calculate(
+				$options['subject'],
+				$method->getCalculatorConfiguration()
+			);
 		}
 
 		$view->vars['payment_costs'] = $paymentCosts;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtendedType()
+	public static function getExtendedTypes(): iterable
 	{
-		return PaymentMethodChoiceType::class;
+		return [
+			PaymentMethodChoiceType::class
+		];
 	}
 }

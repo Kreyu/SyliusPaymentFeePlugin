@@ -15,3 +15,5 @@ docker-compose.yaml
 /deploy/
 /docker/
 /etc/
+
+/.idea/

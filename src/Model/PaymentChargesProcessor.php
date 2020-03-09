@@ -2,31 +2,24 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Model;
+namespace Kreyu\Sylius\PaymentFeePlugin\Model;
 
-use MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface;
+use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Order\Model\AdjustmentInterface as BaseAdjustmentInterface;
 use Sylius\Component\Order\Model\OrderInterface as BaseOrderInterface;
 use Sylius\Component\Order\Processor\OrderProcessorInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Webmozart\Assert\Assert;
 
 final class PaymentChargesProcessor implements OrderProcessorInterface
 {
-	/**
-	 * @var FactoryInterface
-	 */
+	/** @var FactoryInterface */
 	private $adjustmentFactory;
 
-	/**
-	 * @var DelegatingCalculatorInterface
-	 */
+	/** @var DelegatingCalculatorInterface */
 	private $paymentChargesCalculator;
 
-	/**
-	 * @param FactoryInterface $adjustmentFactory
-	 * @param DelegatingCalculatorInterface $paymentChargesCalculator
-	 */
 	public function __construct(
 		FactoryInterface $adjustmentFactory,
 		DelegatingCalculatorInterface $paymentChargesCalculator
@@ -35,26 +28,33 @@ final class PaymentChargesProcessor implements OrderProcessorInterface
 		$this->paymentChargesCalculator = $paymentChargesCalculator;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @param OrderInterface $order
+	 */
 	public function process(BaseOrderInterface $order): void
 	{
-		assert($order instanceof OrderInterface);
+		Assert::isInstanceOf($order, OrderInterface::class);
 
 		$order->removeAdjustments(AdjustmentInterface::PAYMENT_ADJUSTMENT);
 
 		foreach ($order->getPayments() as $payment) {
 			$paymentCharge = $this->paymentChargesCalculator->calculate($payment);
 
-			if ($paymentCharge === null) {
+			if (null === $paymentCharge) {
 				continue;
 			}
 
+			/** @var BaseAdjustmentInterface $adjustment */
 			$adjustment = $this->adjustmentFactory->createNew();
-			assert($adjustment instanceof BaseAdjustmentInterface);
+
+			Assert::isInstanceOf($adjustment, BaseAdjustmentInterface::class);
 
 			$adjustment->setType(AdjustmentInterface::PAYMENT_ADJUSTMENT);
 			$adjustment->setAmount($paymentCharge);
-			$adjustment->setLabel($payment->getMethod() !== null ? $payment->getMethod()->getName() : null);
-			$adjustment->setOriginCode($payment->getMethod() !== null ? $payment->getMethod()->getCode() : null);
+			$adjustment->setLabel($payment->getMethod() ? $payment->getMethod()->getName() : null);
+			$adjustment->setOriginCode($payment->getMethod() ? $payment->getMethod()->getCode() : null);
 			$adjustment->setNeutral(false);
 
 			$order->addAdjustment($adjustment);

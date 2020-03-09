@@ -2,38 +2,30 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
+namespace Kreyu\Sylius\PaymentFeePlugin\Model\Calculator;
 
 use Sylius\Component\Core\Exception\MissingChannelConfigurationException;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
-use Sylius\Component\Payment\Model\PaymentInterface as BasePaymentInterface;
+use Webmozart\Assert\Assert;
 
 final class FlatRateCalculator implements CalculatorInterface
 {
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @throws \Sylius\Component\Core\Exception\MissingChannelConfigurationException
-	 */
-	public function calculate(BasePaymentInterface $subject, array $configuration): ?int
+	public function calculate(PaymentInterface $subject, array $configuration): ?int
 	{
-		assert($subject instanceof PaymentInterface);
-
 		$order = $subject->getOrder();
-		assert($order instanceof OrderInterface);
 
-		if ($order->getChannel() === null) {
-			throw new \ErrorException('$order->getChannel() cannot by NULL');
-		}
+		Assert::isInstanceOf($order, OrderInterface::class);
+		Assert::notNull($order->getChannel());
 
 		$channelCode = $order->getChannel()->getCode();
 
 		if (!isset($configuration[$channelCode])) {
-			throw new MissingChannelConfigurationException(sprintf(
-					'Channel %s has no amount defined for shipping method %s',
+			throw new MissingChannelConfigurationException(
+				sprintf(
+					'Channel %s has no amount defined for payment method %s',
 					$order->getChannel()->getName(),
-					$subject->getMethod() !== null ? $subject->getMethod()->getName() : 'null'
+					$subject->getMethod() ? $subject->getMethod()->getName() : 'null'
 				)
 			);
 		}
@@ -41,11 +33,8 @@ final class FlatRateCalculator implements CalculatorInterface
 		return (int) $configuration[$channelCode]['amount'];
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getType(): string
 	{
-		return 'flat_rate';
+		return 'kreyu_payment_fee_flat_rate';
 	}
 }

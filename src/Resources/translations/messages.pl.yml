@@ -1,0 +1,11 @@
+kreyu_sylius_payment_fee_plugin:
+    ui:
+        payment_charges: Koszty metody płatności
+        payment_fee_total: Koszt metody płatności
+    form:
+        payment_method:
+            calculator: Kalkulator
+        payment_calculator:
+            flat_rate_configuration:
+                label: Jednolita stawka za metodę płatności
+                amount: Wartość

@@ -18,8 +18,8 @@
 ## Installation
 
 1. Run `$ composer require mangoweb-sylius/sylius-payment-fee-plugin`.
-2. Register `\MangoSylius\PaymentFeePlugin\MangoSyliusPaymentFeePlugin` in your Kernel.
-3. Your Entity `PaymentMethod` has to implement `\MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
+2. Register `\Kreyu\Sylius\PaymentFeePlugin\KreyuSyliusPaymentFeePlugin` in your Kernel.
+3. Your Entity `PaymentMethod` has to implement `\Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
 
 For guide how to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.3/customization/model.html)
 
@@ -30,7 +30,7 @@ For guide how to use your own entity see [Sylius docs - Customizing Models](http
 ```twig
 
 <div class="ui segment">
-	<h4 class="ui dividing header">{{ 'mango-sylius.ui.payment_charges'|trans }}</h4>
+	<h4 class="ui dividing header">{{ 'kreyu_sylius_payment_fee_plugin.ui.payment_charges'|trans }}</h4>
 	{{ form_row(form.calculator) }}
 	{% for name, calculatorConfigurationPrototype in form.vars.prototypes %}
 		<div id="{{ form.calculator.vars.id }}_{{ name }}" data-container=".calculatorConfiguration"
@@ -51,7 +51,7 @@ For guide how to use your own entity see [Sylius docs - Customizing Models](http
 
 ```twig
 
-{% set paymentFeeAdjustment = constant('MangoSylius\\PaymentFeePlugin\\Model\\AdjustmentInterface::PAYMENT_ADJUSTMENT') %}
+{% set paymentFeeAdjustment = constant('Kreyu\Sylius\\PaymentFeePlugin\\Model\\AdjustmentInterface::PAYMENT_ADJUSTMENT') %}
 
 {% set paymentFeeAdjustments = order.getAdjustmentsRecursively(paymentFeeAdjustment) %}
 {% if paymentFeeAdjustments is not empty %}
@@ -73,7 +73,7 @@ For guide how to use your own entity see [Sylius docs - Customizing Models](http
 
 		</td>
 		<td colspan="4" id="paymentFee-total" class="right aligned">
-			<strong>{{ 'mango-sylius.ui.paymentFee_total'|trans }}</strong>:
+			<strong>{{ 'kreyu_sylius_payment_fee_plugin.ui.payment_fee_total'|trans }}</strong>:
 			{{ money.format(order.getAdjustmentsTotal(paymentFeeAdjustment) ,order.currencyCode) }}
 		</td>
 	</tr>

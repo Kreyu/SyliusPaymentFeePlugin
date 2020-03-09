@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Form\Extension;
+namespace Kreyu\Sylius\PaymentFeePlugin\Form\Extension;
 
-use MangoSylius\PaymentFeePlugin\Form\Type\CalculatorChoiceType;
-use MangoSylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
-use MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
-use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType as SyliusPaymentMethodType;
+use Kreyu\Sylius\PaymentFeePlugin\Form\Type\CalculatorChoiceType;
+use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
+use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType;
 use Sylius\Bundle\ResourceBundle\Form\EventSubscriber\AddCodeFormSubscriber;
 use Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistryInterface;
 use Sylius\Bundle\TaxationBundle\Form\Type\TaxCategoryChoiceType;
@@ -18,17 +18,14 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Webmozart\Assert\Assert;
 
-class PaymentMethodTypeExtension extends AbstractTypeExtension
+final class PaymentMethodTypeExtension extends AbstractTypeExtension
 {
-	/**
-	 * @var ServiceRegistryInterface
-	 */
+	/** @var ServiceRegistryInterface */
 	private $calculatorRegistry;
 
-	/**
-	 * @var FormTypeRegistryInterface
-	 */
+	/** @var FormTypeRegistryInterface */
 	private $formTypeRegistry;
 
 	public function __construct(
@@ -39,26 +36,28 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$this->formTypeRegistry = $formTypeRegistry;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
 			->addEventSubscriber(new AddCodeFormSubscriber())
 			->add('taxCategory', TaxCategoryChoiceType::class)
 			->add('calculator', CalculatorChoiceType::class, [
-				'label' => 'mango-sylius.form.payment_method.calculator',
-			]
-			)->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+				'label' => 'kreyu_sylius_payment_fee_plugin.form.payment_method.calculator',
+			])
+			->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 				$method = $event->getData();
 
-				if ($method === null || $method->getId() === null) {
+				if (null === $method || null === $method->getId()) {
 					return;
 				}
 
 				if ($method instanceof PaymentMethodWithFeeInterface && $method->getCalculator() !== null) {
 					$this->addConfigurationField($event->getForm(), $method->getCalculator());
 				}
-			}
-			)
+			})
 			->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
 				$data = $event->getData();
 
@@ -67,19 +66,23 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 				}
 
 				$this->addConfigurationField($event->getForm(), $data['calculator']);
-			}
-			);
+			});
 
 		$prototypes = [];
+
 		foreach ($this->calculatorRegistry->all() as $name => $calculator) {
-			assert($calculator instanceof CalculatorInterface);
+			Assert::isInstanceOf($calculator, CalculatorInterface::class);
+
 			$calculatorType = $calculator->getType();
 
 			if (!$this->formTypeRegistry->has($calculatorType, 'default')) {
 				continue;
 			}
 
-			$form = $builder->create('calculatorConfiguration', $this->formTypeRegistry->get($calculatorType, 'default'));
+			$form = $builder->create(
+				'calculatorConfiguration',
+				$this->formTypeRegistry->get($calculatorType, 'default')
+			);
 
 			$prototypes['calculators'][$name] = $form->getForm();
 		}
@@ -90,9 +93,11 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 	private function addConfigurationField(FormInterface $form, string $calculatorName): void
 	{
 		$calculator = $this->calculatorRegistry->get($calculatorName);
-		assert($calculator instanceof CalculatorInterface);
+
+		Assert::isInstanceOf($calculator, CalculatorInterface::class);
 
 		$calculatorType = $calculator->getType();
+
 		if (!$this->formTypeRegistry->has($calculatorType, 'default')) {
 			return;
 		}
@@ -100,9 +105,13 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$form->add('calculatorConfiguration', $this->formTypeRegistry->get($calculatorType, 'default'));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function buildView(FormView $view, FormInterface $form, array $options): void
 	{
 		$view->vars['prototypes'] = [];
+
 		foreach ($form->getConfig()->getAttribute('prototypes') as $group => $prototypes) {
 			foreach ($prototypes as $type => $prototype) {
 				$view->vars['prototypes'][$group . '_' . $type] = $prototype->createView($view);
@@ -111,10 +120,12 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
-	public function getExtendedType()
+	public static function getExtendedTypes(): iterable
 	{
-		return SyliusPaymentMethodType::class;
+		return [
+			PaymentMethodType::class,
+		];
 	}
 }

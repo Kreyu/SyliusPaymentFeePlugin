@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\MangoSylius\PaymentFeePlugin\Behat\Page\Shop;
+namespace Tests\Kreyu\Sylius\PaymentFeePlugin\Behat\Page\Shop;
 
 use Sylius\Behat\Page\PageInterface;
 

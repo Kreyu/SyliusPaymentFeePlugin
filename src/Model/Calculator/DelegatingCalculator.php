@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
+namespace Kreyu\Sylius\PaymentFeePlugin\Model\Calculator;
 
-use MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\Sylius\PaymentFeePlugin\Exception\UndefinedPaymentMethodException;
+use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Registry\ServiceRegistryInterface;
+use Webmozart\Assert\Assert;
 
 final class DelegatingCalculator implements DelegatingCalculatorInterface
 {
-	/**
-	 * @var ServiceRegistryInterface
-	 */
+	/** @var ServiceRegistryInterface */
 	private $registry;
 
 	public function __construct(ServiceRegistryInterface $registry)
@@ -20,25 +20,19 @@ final class DelegatingCalculator implements DelegatingCalculatorInterface
 		$this->registry = $registry;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
 	public function calculate(PaymentInterface $subject): ?int
 	{
-		$method = $subject->getMethod();
-		if ($method === null) {
+		if (null === $method = $subject->getMethod()) {
 			throw new UndefinedPaymentMethodException('Cannot calculate charge for payment without a defined payment method.');
 		}
 
-		if (!($method instanceof PaymentMethodWithFeeInterface)) {
-			return 0;
-		}
-		if ($method->getCalculator() === null) {
+		if (!$method instanceof PaymentMethodWithFeeInterface || null === $method->getCalculator()) {
 			return 0;
 		}
 
 		$calculator = $this->registry->get($method->getCalculator());
-		assert($calculator instanceof CalculatorInterface);
+
+		Assert::isInstanceOf($calculator, CalculatorInterface::class);
 
 		return $calculator->calculate($subject, $method->getCalculatorConfiguration());
 	}

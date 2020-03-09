@@ -1,9 +1,7 @@
-mango-sylius:
-
+kreyu_sylius_payment_fee_plugin:
     ui:
         payment_charges: Payment charges
-        paymentFee_total: Payment fees total
-
+        payment_fee_total: Payment fees total
     form:
         payment_method:
             calculator: Calculator

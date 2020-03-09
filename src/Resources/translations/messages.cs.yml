@@ -1,9 +1,7 @@
-mango-sylius:
-
+kreyu_sylius_payment_fee_plugin:
     ui:
         payment_charges: Poplatky
-        paymentFee_total: Poplatky celkem
-
+        payment_fee_total: Poplatky celkem
     form:
         payment_method:
             calculator: Calculator

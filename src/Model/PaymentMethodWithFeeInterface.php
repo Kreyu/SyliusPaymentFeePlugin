@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Model;
+namespace Kreyu\Sylius\PaymentFeePlugin\Model;
 
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Taxation\Model\TaxableInterface;

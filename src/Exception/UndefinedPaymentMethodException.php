@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
+namespace Kreyu\Sylius\PaymentFeePlugin\Exception;
 
 class UndefinedPaymentMethodException extends \InvalidArgumentException
 {
+	// ...
 }

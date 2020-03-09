@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\MangoSylius\PaymentFeePlugin\Behat\Context\Ui\Shop;
+namespace Tests\Kreyu\Sylius\PaymentFeePlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
-use Tests\MangoSylius\PaymentFeePlugin\Behat\Page\Shop\WelcomePageInterface;
+use Tests\Kreyu\Sylius\PaymentFeePlugin\Behat\Page\Shop\WelcomePageInterface;
 use Webmozart\Assert\Assert;
 
 final class WelcomeContext implements Context
