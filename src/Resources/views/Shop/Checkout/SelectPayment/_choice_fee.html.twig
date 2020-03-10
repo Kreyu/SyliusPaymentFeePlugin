@@ -1,0 +1,11 @@
+{% import '@SyliusShop/Common/Macro/money.html.twig' as money %}
+
+{% set fee = choice_form.parent.vars.payment_costs[choice_form.vars.value] %}
+
+{% if fee > 0 %}
+	<div class="extra">
+		<div class="ui large right floated fee label">
+			{{ money.convertAndFormat(fee) }}
+		</div>
+	</div>
+{% endif %}

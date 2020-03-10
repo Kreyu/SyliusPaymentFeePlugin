@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\SyliusPaymentFeePlugin\Model\Taxation\Applicator;
+namespace Kreyu\SyliusPaymentFeePlugin\Taxation\Applicator;
 
 use Kreyu\SyliusPaymentFeePlugin\Model\AdjustmentInterface;
 use Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
@@ -61,7 +61,7 @@ class OrderPaymentTaxesApplicator implements OrderTaxesApplicatorInterface
 			return;
 		}
 
-		$label = $taxRate->getLabel() ?? 'Payment Tax';
+		$label = $taxRate->getLabel() ?? 'Payment method fee tax';
 
 		$paymentTaxAdjustment = $this->adjustmentFactory->createWithData(
 			AdjustmentInterface::TAX_ADJUSTMENT,

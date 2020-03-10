@@ -43,6 +43,6 @@ final class FlatRateConfigurationType extends AbstractType
 
 	public function getBlockPrefix(): string
 	{
-		return 'kreyu_payment_fee_shipping_calculator_flat_rate';
+		return 'kreyu_payment_fee_payment_calculator_flat_rate';
 	}
 }

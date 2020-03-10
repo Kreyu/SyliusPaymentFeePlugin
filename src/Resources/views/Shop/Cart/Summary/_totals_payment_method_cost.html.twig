@@ -1,0 +1,11 @@
+{% import "@SyliusShop/Common/Macro/money.html.twig" as money %}
+
+<tr>
+	<td>{{ 'kreyu_sylius_payment_fee_plugin.ui.payment_fee_total'|trans }}:</td>
+	<td class="right aligned">
+		{% if cart.getAdjustmentsTotal('payment') > cart.paymentTotal %}
+			<span class="old-price">{{ money.convertAndFormat(cart.getAdjustmentsTotal('payment')) }}</span>
+		{% endif %}
+		<span id="sylius-cart-payment-total">{{ money.convertAndFormat(cart.paymentTotal) }}</span>
+	</td>
+</tr>

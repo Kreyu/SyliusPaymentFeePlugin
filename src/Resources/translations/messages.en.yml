@@ -1,7 +1,7 @@
 kreyu_sylius_payment_fee_plugin:
     ui:
         payment_charges: Payment charges
-        payment_fee_total: Payment fees total
+        payment_fee_total: Payment fee total
     form:
         payment_method:
             calculator: Calculator

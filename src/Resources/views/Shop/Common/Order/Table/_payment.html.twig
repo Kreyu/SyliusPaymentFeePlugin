@@ -1,0 +1,6 @@
+{% import "@SyliusShop/Common/Macro/money.html.twig" as money %}
+
+<td colspan="4" class="right aligned" id="payment-total">
+	{{ 'kreyu_sylius_payment_fee_plugin.ui.payment_fee_total'|trans }}:
+	{{ money.convertAndFormat(order.paymentTotal) }}
+</td>

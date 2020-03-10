@@ -67,6 +67,10 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 
 		$prototypes = [];
 
+		/**
+		 * @var string $name
+		 * @var CalculatorInterface $calculator
+		 */
 		foreach ($this->calculatorRegistry->all() as $name => $calculator) {
 			Assert::isInstanceOf($calculator, CalculatorInterface::class);
 

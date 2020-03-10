@@ -4,7 +4,7 @@ services:
         autoconfigure: false
         public: false
 
-    # Sylius\Component\Channel\Context\ChannelContextInterface: '@sylius.context.channel.cached'
+    Sylius\Component\Channel\Context\ChannelContextInterface: '@sylius.context.channel.cached'
 
     Kreyu\SyliusPaymentFeePlugin\Form\Type\Calculator\FlatRateConfigurationType: ~
 
@@ -25,8 +25,7 @@ services:
             $calculatorRegistry: '@kreyu.payment_fee_plugin.registry.payment_calculator'
             $formTypeRegistry: '@kreyu.payment_fee_plugin.form_registry.payment_calculator'
         tags:
-            -   extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType
-                name: form.type_extension
+            -   name: form.type_extension
 
     Kreyu\SyliusPaymentFeePlugin\Form\Extension\PaymentMethodChoiceTypeExtension:
         arguments:
@@ -46,12 +45,13 @@ services:
 
     Kreyu\SyliusPaymentFeePlugin\Model\Calculator\FlatRateCalculator:
         tags:
-            -   calculator: flat_rate
+            -   calculator: kreyu_payment_fee_flat_rate
                 form_type: Kreyu\SyliusPaymentFeePlugin\Form\Type\Calculator\ChannelBasedFlatRateConfigurationType
                 label: 'kreyu_sylius_payment_fee_plugin.form.payment_calculator.flat_rate_configuration.label'
                 name: Kreyu\SyliusPaymentFeePlugin\Model\Calculator\DelegatingCalculator
 
-    Kreyu\SyliusPaymentFeePlugin\Model\PaymentChargesProcessor:
+    kreyu.payment_fee_plugin.order_processing.payment_charger_processor:
+        class: Kreyu\SyliusPaymentFeePlugin\OrderProcessing\PaymentChargesProcessor
         arguments:
             $adjustmentFactory: '@sylius.factory.adjustment'
             $paymentChargesCalculator: '@Kreyu\SyliusPaymentFeePlugin\Model\Calculator\DelegatingCalculator'
@@ -76,7 +76,7 @@ services:
                 method: onBlockEvent
                 name: kernel.event_listener
 
-    Kreyu\SyliusPaymentFeePlugin\Model\Taxation\Applicator\OrderPaymentTaxesApplicator:
+    Kreyu\SyliusPaymentFeePlugin\Taxation\Applicator\OrderPaymentTaxesApplicator:
         arguments:
             $calculator: '@sylius.tax_calculator'
             $adjustmentFactory: '@sylius.factory.adjustment'
@@ -94,7 +94,7 @@ services:
             $applicators:
                 - '@sylius.taxation.order_items_taxes_applicator'
                 - '@sylius.taxation.order_shipment_taxes_applicator'
-                - '@Kreyu\SyliusPaymentFeePlugin\Model\Taxation\Applicator\OrderPaymentTaxesApplicator'
+                - '@Kreyu\SyliusPaymentFeePlugin\Taxation\Applicator\OrderPaymentTaxesApplicator'
 
     kreyu.taxation.order_item_units_based_strategy:
         class: Sylius\Bundle\CoreBundle\Taxation\Strategy\TaxCalculationStrategy
@@ -108,4 +108,4 @@ services:
             $applicators:
                 - '@sylius.taxation.order_item_units_taxes_applicator'
                 - '@sylius.taxation.order_shipment_taxes_applicator'
-                - '@Kreyu\SyliusPaymentFeePlugin\Model\Taxation\Applicator\OrderPaymentTaxesApplicator'
+                - '@Kreyu\SyliusPaymentFeePlugin\Taxation\Applicator\OrderPaymentTaxesApplicator'

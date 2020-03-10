@@ -18,3 +18,9 @@ sylius_payment:
         payment_method:
             classes:
                 model: Tests\Kreyu\SyliusPaymentFeePlugin\Application\PaymentMethod
+
+sylius_order:
+    resources:
+        order:
+            classes:
+                model: Tests\Kreyu\SyliusPaymentFeePlugin\Application\Order
