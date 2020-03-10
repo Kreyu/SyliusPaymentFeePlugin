@@ -31,7 +31,7 @@
             </td>
         </tr>
 
-		{% include '@KreyuSyliusPaymentFeePlugin/Shop/Cart/Summary/_totals_payment_method_cost.html.twig' %}
+		{% include 'KreyuSyliusPaymentFeePlugin:Shop/Cart/Summary:_totals_payment_method_cost.html.twig' %}
 
         <tr {% if taxIncluded and not taxExcluded %}class="tax-disabled"{% endif %}>
             <td>{{ 'sylius.ui.taxes_total'|trans }}:</td>
