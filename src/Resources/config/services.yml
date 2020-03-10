@@ -70,7 +70,7 @@ services:
     kreyu.payment_fee_plugin.block_event_listener.admin.layout.javascripts:
         class: Sylius\Bundle\UiBundle\Block\BlockEventListener
         arguments:
-            - '@@KreyuSyliusPaymentFeePlugin/Admin/_javascripts.html.twig'
+            - '@@KreyuSyliusPaymentFeePlugin/Admin/PaymentMethod/_javascripts.html.twig'
         tags:
             -   event: sonata.block.event.sylius.admin.layout.javascripts
                 method: onBlockEvent
