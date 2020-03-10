@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model\Calculator;
+namespace Kreyu\SyliusPaymentFeePlugin\Model\Calculator;
 
 use Sylius\Component\Core\Exception\MissingChannelConfigurationException;
 use Sylius\Component\Core\Model\OrderInterface;

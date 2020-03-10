@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+				  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+	<entity name="Tests\Kreyu\SyliusPaymentFeePlugin\Application\PaymentMethod" table="sylius_payment_method">
+		<field name="calculator" type="text" nullable="true"/>
+		<many-to-one field="taxCategory" target-entity="Sylius\Component\Taxation\Model\TaxCategory">
+			<join-column name="tax_category_id"/>
+		</many-to-one>
+		<field name="calculatorConfiguration" column="calculator_configuration" type="json" nullable="true"/>
+	</entity>
+</doctrine-mapping>

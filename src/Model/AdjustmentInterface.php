@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model;
+namespace Kreyu\SyliusPaymentFeePlugin\Model;
 
 use Sylius\Component\Core\Model\AdjustmentInterface as SyliusAdjustmentInterface;
 

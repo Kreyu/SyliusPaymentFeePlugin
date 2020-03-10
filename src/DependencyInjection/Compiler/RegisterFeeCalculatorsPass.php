@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\DependencyInjection\Compiler;
+namespace Kreyu\SyliusPaymentFeePlugin\DependencyInjection\Compiler;
 
-use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator;
+use Kreyu\SyliusPaymentFeePlugin\Model\Calculator\DelegatingCalculator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

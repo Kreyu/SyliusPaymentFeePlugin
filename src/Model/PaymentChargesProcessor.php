@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model;
+namespace Kreyu\SyliusPaymentFeePlugin\Model;
 
-use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Order\Model\AdjustmentInterface as BaseAdjustmentInterface;
 use Sylius\Component\Order\Model\OrderInterface as BaseOrderInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Form\Type;
+namespace Kreyu\SyliusPaymentFeePlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -18,9 +18,6 @@ final class CalculatorChoiceType extends AbstractType
 		$this->calculators = $calculators;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function configureOptions(OptionsResolver $resolver): void
 	{
 		$resolver
@@ -30,17 +27,11 @@ final class CalculatorChoiceType extends AbstractType
 		;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getParent(): string
 	{
 		return ChoiceType::class;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getBlockPrefix(): string
 	{
 		return 'kreyu_payment_fee_payment_calculator_choice';

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model;
+namespace Kreyu\SyliusPaymentFeePlugin\Model;
 
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Taxation\Model\TaxableInterface;

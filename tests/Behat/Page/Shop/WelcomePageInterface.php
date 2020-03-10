@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Kreyu\Sylius\PaymentFeePlugin\Behat\Page\Shop;
+namespace Tests\Kreyu\SyliusPaymentFeePlugin\Behat\Page\Shop;
 
-use Sylius\Behat\Page\PageInterface;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 
-interface WelcomePageInterface extends PageInterface
+interface WelcomePageInterface extends SymfonyPageInterface
 {
-	/**
-	 * @return string
-	 */
-	public function getGreeting(): string;
+    /**
+     * @return string
+     */
+    public function getGreeting(): string;
 }

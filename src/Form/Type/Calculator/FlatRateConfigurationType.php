@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Form\Type\Calculator;
+namespace Kreyu\SyliusPaymentFeePlugin\Form\Type\Calculator;
 
 use Sylius\Bundle\MoneyBundle\Form\Type\MoneyType;
 use Symfony\Component\Form\AbstractType;
@@ -13,9 +13,6 @@ use Symfony\Component\Validator\Constraints\Type;
 
 final class FlatRateConfigurationType extends AbstractType
 {
-	/**
-	 * {@inheritDoc}
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
@@ -34,9 +31,6 @@ final class FlatRateConfigurationType extends AbstractType
 			]);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function configureOptions(OptionsResolver $resolver): void
 	{
 		$resolver
@@ -47,9 +41,6 @@ final class FlatRateConfigurationType extends AbstractType
 			->setAllowedTypes('currency', 'string');
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getBlockPrefix(): string
 	{
 		return 'kreyu_payment_fee_shipping_calculator_flat_rate';

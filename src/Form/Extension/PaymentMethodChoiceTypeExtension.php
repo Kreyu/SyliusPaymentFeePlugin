@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Form\Extension;
+namespace Kreyu\SyliusPaymentFeePlugin\Form\Extension;
 
-use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
-use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\Calculator\CalculatorInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodChoiceType;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
@@ -56,6 +56,11 @@ final class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 		}
 
 		$view->vars['payment_costs'] = $paymentCosts;
+	}
+
+	public function getExtendedType()
+	{
+		return PaymentMethodChoiceType::class;
 	}
 
 	public static function getExtendedTypes(): iterable

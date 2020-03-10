@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model\Taxation\Applicator;
+namespace Kreyu\SyliusPaymentFeePlugin\Model\Taxation\Applicator;
 
-use Kreyu\Sylius\PaymentFeePlugin\Model\AdjustmentInterface;
-use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\AdjustmentInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Component\Addressing\Model\ZoneInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Taxation\Applicator\OrderTaxesApplicatorInterface;
@@ -35,9 +35,6 @@ class OrderPaymentTaxesApplicator implements OrderTaxesApplicatorInterface
 		$this->taxRateResolver = $taxRateResolver;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function apply(OrderInterface $order, ZoneInterface $zone): void
 	{
 		$paymentFees = $order->getAdjustmentsRecursively(AdjustmentInterface::PAYMENT_ADJUSTMENT);

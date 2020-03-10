@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Form\Extension;
+namespace Kreyu\SyliusPaymentFeePlugin\Form\Extension;
 
-use Kreyu\Sylius\PaymentFeePlugin\Form\Type\CalculatorChoiceType;
-use Kreyu\Sylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface;
-use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\SyliusPaymentFeePlugin\Form\Type\CalculatorChoiceType;
+use Kreyu\SyliusPaymentFeePlugin\Model\Calculator\CalculatorInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType;
 use Sylius\Bundle\ResourceBundle\Form\EventSubscriber\AddCodeFormSubscriber;
 use Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistryInterface;
@@ -36,9 +36,6 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$this->formTypeRegistry = $formTypeRegistry;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -105,9 +102,6 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$form->add('calculatorConfiguration', $this->formTypeRegistry->get($calculatorType, 'default'));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function buildView(FormView $view, FormInterface $form, array $options): void
 	{
 		$view->vars['prototypes'] = [];
@@ -119,9 +113,11 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	public function getExtendedType()
+	{
+		return PaymentMethodType::class;
+	}
+
 	public static function getExtendedTypes(): iterable
 	{
 		return [

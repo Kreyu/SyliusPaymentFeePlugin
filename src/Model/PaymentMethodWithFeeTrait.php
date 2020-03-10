@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model;
+namespace Kreyu\SyliusPaymentFeePlugin\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Taxation\Model\TaxCategoryInterface;

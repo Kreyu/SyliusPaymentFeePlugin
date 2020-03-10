@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kreyu\Sylius\PaymentFeePlugin\Model\Calculator;
+namespace Kreyu\SyliusPaymentFeePlugin\Model\Calculator;
 
-use Kreyu\Sylius\PaymentFeePlugin\Exception\UndefinedPaymentMethodException;
-use Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
+use Kreyu\SyliusPaymentFeePlugin\Exception\UndefinedPaymentMethodException;
+use Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Webmozart\Assert\Assert;

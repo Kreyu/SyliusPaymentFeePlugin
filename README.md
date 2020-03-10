@@ -18,8 +18,8 @@
 ## Installation
 
 1. Run `$ composer require mangoweb-sylius/sylius-payment-fee-plugin`.
-2. Register `\Kreyu\Sylius\PaymentFeePlugin\KreyuSyliusPaymentFeePlugin` in your Kernel.
-3. Your Entity `PaymentMethod` has to implement `\Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `Kreyu\Sylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
+2. Register `\Kreyu\SyliusPaymentFeePlugin\KreyuSyliusPaymentFeePlugin` in your Kernel.
+3. Your Entity `PaymentMethod` has to implement `\Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `Kreyu\SyliusPaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
 
 For guide how to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.3/customization/model.html)
 
