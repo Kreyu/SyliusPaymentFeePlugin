@@ -90,73 +90,94 @@ To display the payment fee total in the order details in admin panel, override t
 {% include 'KreyuSyliusPaymentFeePlugin:Admin/Order/Show/Summary:_totals_payment_fee.html.twig' %}
 ```
 
-### Customizing the shop templates
+### Integration with SyliusShopBundle
 
 If you're using the [SyliusShopBundle](https://github.com/Sylius/Sylius/tree/master/src/Sylius/Bundle/ShopBundle), you may want to override the bundle templates.  
-Because shop templates does not use Sonata Block events nor the twig blocks, we have to copy the entire templates.  
+Because shop templates does not use Sonata Block events nor the twig blocks, we have to copy the entire templates.    
+For more information, take a look at the [test application ShopBundle templates](tests/Application/templates/bundles/SyliusShopBundle) to see what has to be changed and how.
 
-```twig
-{# templates/bundles/SyliusShopBundle/Cart/Summary/_totals.html.twig #}
+### Integration with SyliusShopApiBundle
 
-<div class="ui segment">
-    <table class="ui very basic table">
-        {# Rest of the table... #}
+First, override the `TotalsView` view model, to add the `payment` property:
 
-        {# Include the bundle template somewhere in this table... #}
-        {% include 'KreyuSyliusPaymentFeePlugin:Shop/Cart/Summary:_totals_payment_method_cost.html.twig' %}
-        
-        {# Rest of the table... #}
-    </table>
-</div>
+```php
+<?php
+
+namespace App\View\Cart;
+
+use Sylius\ShopApiPlugin\View\Cart\TotalsView as BaseTotalsView;
+
+/**
+ * @author Sebastian Wróblewski <kontakt@swroblewski.pl>
+ */
+class TotalsView extends BaseTotalsView
+{
+    /** @var int */
+    public $payment;
+}
 ```
 
-```twig
-{# templates/bundles/SyliusShopBundle/Checkout/SelectPayment/_choice.html.twig #}
+Register the overriden view in the `config/packages/_sylius_shop_api.yaml` configuration file:
 
-<div class="item">
-	<div class="field">
-		<div class="ui radio checkbox">
-			{{ form_widget(form) }}
-		</div>
-	</div>
-	<div class="content">
-		<a class="header">{{ form_label(form) }}</a>
-		{% if method.description is not null %}
-			<div class="description">
-				<p>{{ method.description }}</p>
-			</div>
-		{% endif %}
-	</div>
+```yaml
+imports:
+    - { resource: '@SyliusShopApiPlugin/Resources/config/app/config.yml' }
+    - { resource: '@SyliusShopApiPlugin/Resources/config/app/sylius_mailer.yml' }
 
-	{% include 'KreyuSyliusPaymentFeePlugin:Shop/Checkout/SelectPayment:_choice_fee.html.twig' with { method: method } %}
-</div>
+parameters:
+    sylius.shop_api.view.totals.class: App\View\Cart\TotalsView
 ```
 
-```twig
-{# templates/bundles/SyliusShopBundle/Checkout/_summary.html.twig #}
+Then, decorate the `TotalViewFactory`, to provide data for the added `payment` field:
 
-<div class="ui segment">
-	<table class="ui very basic table" id="sylius-checkout-subtotal">
-        {# Rest of the table... #}
- 
-		<tfoot>
-            {# Include the bundle template somewhere in this table tfoot... #}
-		    {% include 'KreyuSyliusPaymentFeePlugin:Shop/Checkout:_summary_payment_method_cost.html.twig' %}
-		</tfoot>
-	</table>
-</div>
+```php
+<?php
+
+namespace App\ViewFactory\Cart;
+
+use App\View\Cart\TotalsView;
+use App\Entity\Shop\Order\OrderInterface;
+use Kreyu\SyliusPaymentFeePlugin\Model\OrderWithPaymentTotalInterface;
+use Sylius\Component\Core\Model\OrderInterface as BaseOrderInterface;
+use Sylius\ShopApiPlugin\Factory\Cart\TotalViewFactoryInterface;
+use Sylius\ShopApiPlugin\View\Cart\TotalsView as BaseTotalsView;
+
+class TotalViewFactory implements TotalViewFactoryInterface
+{
+    /** @var TotalViewFactoryInterface */
+    private $decoratedFactory;
+
+    public function __construct(TotalViewFactoryInterface $decoratedFactory)
+    {
+        $this->decoratedFactory = $decoratedFactory;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param OrderWithPaymentTotalInterface $cart
+     */
+    public function create(BaseOrderInterface $cart): BaseTotalsView
+    {
+        /** @var TotalsView $totalsView - sylius.shop_api.view.totals.class */
+        $totalsView = $this->decoratedFactory->create($cart);
+
+        $totalsView->payment = $cart->getPaymentTotal();
+
+        return $totalsView;
+    }
+}
 ```
 
-```twig
-{# templates/bundles/SyliusShopBundle/Common/Order/Table/_totals.html.twig #}
+Last but not least, register the factory as the service:
 
-{# Include the bundle template below the _shipping.html.twig import #}
-<tr>
-    {% include '@SyliusShop/Common/Order/Table/_shipping.html.twig' with {'order': order} %}
-</tr>
-<tr>
-	{% include 'KreyuSyliusPaymentFeePlugin:Shop/Common/Order/Table:_payment.html.twig' with {'order': order} %}
-</tr>
+```yaml
+services:
+    app.view_factory.total_view_factory:
+        class: App\ViewFactory\Cart\TotalViewFactory
+        decorates: sylius.shop_api_plugin.factory.total_view_factory
+        arguments:
+            - '@app.view_factory.total_view_factory.inner'
 ```
 
 ### License
