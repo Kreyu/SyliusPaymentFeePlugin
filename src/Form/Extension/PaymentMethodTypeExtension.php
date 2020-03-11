@@ -68,7 +68,6 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$prototypes = [];
 
 		/**
-		 * @var string $name
 		 * @var CalculatorInterface $calculator
 		 */
 		foreach ($this->calculatorRegistry->all() as $name => $calculator) {
@@ -111,6 +110,7 @@ final class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$view->vars['prototypes'] = [];
 
 		foreach ($form->getConfig()->getAttribute('prototypes') as $group => $prototypes) {
+			/** @var FormInterface $prototype */
 			foreach ($prototypes as $type => $prototype) {
 				$view->vars['prototypes'][$group . '_' . $type] = $prototype->createView($view);
 			}

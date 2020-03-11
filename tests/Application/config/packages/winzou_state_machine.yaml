@@ -1,8 +1,0 @@
-winzou_state_machine:
-    sylius_order_checkout:
-        callbacks:
-            before:
-                calculate_payment_fee:
-                    on: ["select_payment"]
-                    do: ["@kreyu.payment_fee_plugin.order_processing.payment_charger_processor", "process"]
-                    args: ["object"]

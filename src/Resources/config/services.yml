@@ -50,7 +50,7 @@ services:
                 label: 'kreyu_sylius_payment_fee_plugin.form.payment_calculator.flat_rate_configuration.label'
                 name: Kreyu\SyliusPaymentFeePlugin\Model\Calculator\DelegatingCalculator
 
-    kreyu.payment_fee_plugin.order_processing.payment_charger_processor:
+    kreyu.payment_fee_plugin.order_processing.payment_charges_processor:
         class: Kreyu\SyliusPaymentFeePlugin\OrderProcessing\PaymentChargesProcessor
         arguments:
             $adjustmentFactory: '@sylius.factory.adjustment'

@@ -23,8 +23,7 @@ final class CalculatorChoiceType extends AbstractType
 		$resolver
 			->setDefaults([
 				'choices' => array_flip($this->calculators),
-			])
-		;
+			]);
 	}
 
 	public function getParent(): string

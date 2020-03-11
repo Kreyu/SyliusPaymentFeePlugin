@@ -136,9 +136,8 @@ Then, decorate the `TotalViewFactory`, to provide data for the added `payment` f
 namespace App\ViewFactory\Cart;
 
 use App\View\Cart\TotalsView;
-use App\Entity\Shop\Order\OrderInterface;
 use Kreyu\SyliusPaymentFeePlugin\Model\OrderWithPaymentTotalInterface;
-use Sylius\Component\Core\Model\OrderInterface as BaseOrderInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\ShopApiPlugin\Factory\Cart\TotalViewFactoryInterface;
 use Sylius\ShopApiPlugin\View\Cart\TotalsView as BaseTotalsView;
 
@@ -157,7 +156,7 @@ class TotalViewFactory implements TotalViewFactoryInterface
      *
      * @param OrderWithPaymentTotalInterface $cart
      */
-    public function create(BaseOrderInterface $cart): BaseTotalsView
+    public function create(OrderInterface $cart): BaseTotalsView
     {
         /** @var TotalsView $totalsView - sylius.shop_api.view.totals.class */
         $totalsView = $this->decoratedFactory->create($cart);

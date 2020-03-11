@@ -15,17 +15,16 @@ final class ChannelBasedFlatRateConfigurationType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver): void
 	{
 		$resolver->setDefaults([
-				'entry_type' => FlatRateConfigurationType::class,
-				'entry_options' => function (ChannelInterface $channel): array {
-					Assert::notNull($channel->getBaseCurrency());
+			'entry_type' => FlatRateConfigurationType::class,
+			'entry_options' => function (ChannelInterface $channel): array {
+				Assert::notNull($channel->getBaseCurrency());
 
-					return [
-						'label' => $channel->getName(),
-						'currency' => $channel->getBaseCurrency()->getCode(),
-					];
-				},
-			]
-		);
+				return [
+					'label' => $channel->getName(),
+					'currency' => $channel->getBaseCurrency()->getCode(),
+				];
+			},
+		]);
 	}
 
 	public function getParent(): string

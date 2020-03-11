@@ -13,13 +13,13 @@ final class RegisterFeeCalculatorsPass implements CompilerPassInterface
 {
 	public function process(ContainerBuilder $container): void
 	{
-		if (!$container->hasDefinition('kreyu.payment_fee_plugin.registry.payment_calculator')
-			|| !$container->hasDefinition('kreyu.payment_fee_plugin.form_registry.payment_calculator')) {
+		if (!$this->supports($container)) {
 			return;
 		}
 
 		$registry = $container->getDefinition('kreyu.payment_fee_plugin.registry.payment_calculator');
 		$formTypeRegistry = $container->getDefinition('kreyu.payment_fee_plugin.form_registry.payment_calculator');
+
 		$calculators = [];
 
 		foreach ($container->findTaggedServiceIds(DelegatingCalculator::class) as $id => $attributes) {
@@ -38,5 +38,11 @@ final class RegisterFeeCalculatorsPass implements CompilerPassInterface
 		}
 
 		$container->setParameter('kreyu.payment_fee_plugin.payment_fee_calculators', $calculators);
+	}
+
+	private function supports(ContainerBuilder $container)
+	{
+		return $container->hasDefinition('kreyu.payment_fee_plugin.registry.payment_calculator')
+			&& $container->hasDefinition('kreyu.payment_fee_plugin.form_registry.payment_calculator');
 	}
 }
